@@ -23,41 +23,49 @@
             cursor: pointer;
             border: 2px solid #fff;
         }
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
-        <img src="PENIS2.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
-        <img src="PENIS3.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
-        <img src="PENIS4.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
+        <img src="PENIS1.png" onclick="handleClick(this, 0)">
+        <img src="PENIS2.png" onclick="handleClick(this, 1)">
+        <img src="PENIS3.png" onclick="handleClick(this, 2)">
+        <img src="PENIS4.png" onclick="handleClick(this, 3)">
     </div>
 
     <script>
         let clicked = [false, false, false, false];
+        let videoOpened = false;
 
-        function handleClick(element, message) {
-            alert(message);
-            const index = [...document.querySelectorAll('.grid img')].indexOf(element);
+        function handleClick(element, index) {
+            alert("(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!");
             clicked[index] = true;
 
             const originalSrc = element.src;
             element.src = "pezniz.png";
-            setTimeout(() => element.src = originalSrc, 500);
 
-            if (clicked.every(c => c)) {
+            setTimeout(() => {
+                element.src = originalSrc;
+            }, 500);
+
+            if (clicked.every(c => c) && !videoOpened) {
+                videoOpened = true;
                 setTimeout(() => {
-                    const videoPath = "ёжики.mp4";
-                    const video = document.createElement('video');
-                    video.src = videoPath;
+                    const video = document.createElement("video");
+                    video.src = "ёжики.mp4";
                     video.controls = true;
                     video.autoplay = true;
-                    video.style.position = "fixed";
-                    video.style.top = "50%";
-                    video.style.left = "50%";
-                    video.style.transform = "translate(-50%, -50%)";
-                    video.style.zIndex = "1000";
                     document.body.appendChild(video);
+                    video.requestFullscreen().catch(() => {});
                 }, 5000);
             }
         }
