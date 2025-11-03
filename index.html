@@ -9,13 +9,16 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
             background-color: #222;
+            font-family: monospace;
         }
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             gap: 10px;
+            z-index: 1;
         }
         .grid img {
             width: 150px;
@@ -31,43 +34,146 @@
             height: 100vh;
             object-fit: cover;
             z-index: 1000;
+            background: black;
         }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: black;
+            color: #fff;
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .console {
+            width: 90%;
+            max-width: 900px;
+            height: 70%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .line {
+            white-space: pre;
+            font-size: 20px;
+            line-height: 1.5;
+        }
+        .green { color: #39ff14; }
+        .white { color: #ffffff; }
     </style>
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png" onclick="handleClick(this, 0)">
-        <img src="PENIS2.png" onclick="handleClick(this, 1)">
-        <img src="PENIS3.png" onclick="handleClick(this, 2)">
-        <img src="PENIS4.png" onclick="handleClick(this, 3)">
+        <img src="PENIS1.png" onclick="handleClick(this)">
+        <img src="PENIS2.png" onclick="handleClick(this)">
+        <img src="PENIS3.png" onclick="handleClick(this)">
+        <img src="PENIS4.png" onclick="handleClick(this)">
     </div>
 
     <script>
-        let clicked = [false, false, false, false];
         let videoOpened = false;
+        let videoElement = null;
 
-        function handleClick(element, index) {
+        function handleClick(element) {
             alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
-            clicked[index] = true;
-
             const originalSrc = element.src;
             element.src = "pezniz.png";
+            setTimeout(() => { element.src = originalSrc; }, 500);
 
-            setTimeout(() => {
-                element.src = originalSrc;
-            }, 500);
-
-            if (clicked.every(c => c) && !videoOpened) {
+            if (!videoOpened) {
                 videoOpened = true;
-                setTimeout(() => {
-                    const video = document.createElement("video");
-                    video.src = "ёжики.mp4";
-                    video.controls = true;
-                    video.autoplay = true;
-                    document.body.appendChild(video);
-                    video.requestFullscreen().catch(() => {});
-                }, 5000);
+                videoElement = document.createElement("video");
+                videoElement.src = "ёжики.mp4";
+                videoElement.controls = true;
+                videoElement.autoplay = true;
+                videoElement.playsInline = true;
+                document.body.appendChild(videoElement);
+                videoElement.requestFullscreen().catch(()=>{});
+                videoElement.addEventListener('play', () => {
+                    setTimeout(startFakeConsole, 9000);
+                });
+                // на случай, если autoplay сработал раньше чем событие 'play' — удобный запас
+                setTimeout(() => { if (!videoElement.paused) startFakeConsole(); }, 9500);
             }
+        }
+
+        function startFakeConsole() {
+            if (document.querySelector('.overlay')) return;
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            const consoleBox = document.createElement('div');
+            consoleBox.className = 'console';
+            overlay.appendChild(consoleBox);
+            document.body.appendChild(overlay);
+
+            const lines = [
+                { text: 'download file "cocal"', color: 'white' },
+                { text: 'done', color: 'green' },
+                { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
+                { text: 'done', color: 'green' },
+                { text: 'checking repository "E:\js_game 1"', color: 'white' },
+                { text: 'done', color: 'green' },
+                { text: 'Checking files in repository "E:\js_game 1"', color: 'white' },
+                { text: 'done', color: 'green' },
+                { text: 'found "index.html", "PENIS1.png", "PENIS2.png", "PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4".', color: 'green' },
+                { text: 'updating "index.html"', color: 'white' },
+                { text: 'PERCENT_SEQUENCE', color: 'green' }, // placeholder для процентов
+                { text: 'done', color: 'green' },
+                { text: 'opening "index.html"', color: 'white' },
+                { text: 'done', color: 'green' }
+            ];
+
+            let curLine = 0;
+            function typeNextLine() {
+                if (curLine >= lines.length) return;
+                const info = lines[curLine++];
+                if (info.text === 'PERCENT_SEQUENCE') {
+                    const lineEl = document.createElement('div');
+                    lineEl.className = 'line green';
+                    consoleBox.appendChild(lineEl);
+                    runPercent(lineEl, () => {
+                        setTimeout(typeNextLine, 300);
+                    });
+                } else {
+                    const lineEl = document.createElement('div');
+                    lineEl.className = 'line ' + (info.color === 'green' ? 'green' : 'white');
+                    consoleBox.appendChild(lineEl);
+                    typeText(lineEl, info.text, 100, () => {
+                        setTimeout(typeNextLine, 300);
+                    });
+                }
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            }
+
+            function typeText(el, text, perCharMs, cb) {
+                let i = 0;
+                const t = setInterval(() => {
+                    el.textContent += text[i++];
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                    if (i >= text.length) {
+                        clearInterval(t);
+                        cb && cb();
+                    }
+                }, perCharMs);
+            }
+
+            function runPercent(el, doneCb) {
+                let p = 1;
+                el.textContent = p + '%';
+                const fastMs = 30;
+                const it = setInterval(() => {
+                    p++;
+                    el.textContent = p + '%';
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                    if (p >= 100) {
+                        clearInterval(it);
+                        doneCb && doneCb();
+                    }
+                }, fastMs);
+            }
+
+            typeNextLine();
         }
     </script>
 </body>
