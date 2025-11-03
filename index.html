@@ -64,25 +64,27 @@
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png" onclick="handleClick(this)">
-        <img src="PENIS2.png" onclick="handleClick(this)">
-        <img src="PENIS3.png" onclick="handleClick(this)">
-        <img src="PENIS4.png" onclick="handleClick(this)">
+        <img src="PENIS1.png" onclick="handleClick(this, 0)">
+        <img src="PENIS2.png" onclick="handleClick(this, 1)">
+        <img src="PENIS3.png" onclick="handleClick(this, 2)">
+        <img src="PENIS4.png" onclick="handleClick(this, 3)">
     </div>
 
     <script>
-        let clickedCount = 0;
+        const clicked = [false, false, false, false];
         let videoOpened = false;
         let videoElement = null;
 
-        function handleClick(element) {
+        function handleClick(element, index) {
             alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
             const originalSrc = element.src;
             element.src = "pezniz.png";
             setTimeout(() => { element.src = originalSrc; }, 500);
 
-            clickedCount++;
-            if (clickedCount === 4 && !videoOpened) {
+            clicked[index] = true;
+
+            // Проверяем, что все картинки были нажаты хотя бы один раз
+            if (!videoOpened && clicked.every(v => v)) {
                 videoOpened = true;
                 videoElement = document.createElement("video");
                 videoElement.src = "ёжики.mp4";
@@ -94,7 +96,8 @@
                 videoElement.style.left = "20%";
                 document.body.appendChild(videoElement);
 
-                setTimeout(startFakeConsole, 9000);
+                // Запуск текста через 12 секунд после включения видео
+                setTimeout(startFakeConsole, 12000);
             }
         }
 
@@ -116,8 +119,9 @@
                 { text: 'done', color: 'green' },
                 { text: 'Checking files in repository "E:\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'found "index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
-                { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4".', color: 'green' },
+                { text: 'found files:', color: 'green' },
+                { text: '"index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
+                { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color: 'green' },
                 { text: 'updating "index.html"', color: 'white' },
                 { text: 'PERCENT_SEQUENCE', color: 'green' },
                 { text: 'done', color: 'green' },
