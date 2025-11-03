@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Моя игра</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.cdnfonts.com/css/minecraft'); /* Пиксельный шрифт */
-
         body {
             display: flex;
             justify-content: center;
@@ -13,7 +12,7 @@
             height: 100vh;
             margin: 0;
             background-color: #222;
-            font-family: 'Minecraft', monospace;
+            font-family: monospace;
         }
 
         .grid {
@@ -60,11 +59,12 @@
             padding: 20px;
             box-sizing: border-box;
             overflow: hidden;
+            font-family: 'Press Start 2P', monospace; /* пиксельный шрифт для консоли */
         }
 
         .line {
             white-space: pre;
-            font-size: 20px;
+            font-size: 16px;
             line-height: 1.5;
         }
 
@@ -73,8 +73,8 @@
 
         /* Вопрос и кнопки */
         .question {
-            font-family: 'Minecraft', monospace; /* пиксельный шрифт */
-            font-size: 60px;
+            font-family: 'Press Start 2P', monospace; /* пиксельный шрифт */
+            font-size: 40px;
             margin-bottom: 30px;
             text-align: center;
         }
@@ -85,8 +85,8 @@
         }
 
         .btn {
-            font-family: 'Minecraft', monospace; /* пиксельный шрифт */
-            font-size: 30px;
+            font-family: 'Press Start 2P', monospace; /* пиксельный шрифт */
+            font-size: 20px;
             padding: 20px 40px;
             border: none;
             border-radius: 20px;
@@ -229,7 +229,7 @@
             yesBtn.textContent = 'ДА';
             yesBtn.onclick = () => {
                 question.textContent = 'Я ТАК И ЗНАЛ!!!';
-                question.style.fontFamily = 'Minecraft, monospace'; // пиксельный шрифт
+                question.style.fontFamily = 'Press Start 2P, monospace'; // пиксельный шрифт
                 yesBtn.style.display = 'none';
                 noBtn.style.display = 'none';
             };
