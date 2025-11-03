@@ -73,6 +73,7 @@
 
         /* Вопрос и кнопки */
         .question {
+            font-family: 'Minecraft', monospace; /* пиксельный шрифт */
             font-size: 60px;
             margin-bottom: 30px;
             text-align: center;
@@ -84,7 +85,7 @@
         }
 
         .btn {
-            font-family: 'Minecraft', monospace;
+            font-family: 'Minecraft', monospace; /* пиксельный шрифт */
             font-size: 30px;
             padding: 20px 40px;
             border: none;
@@ -152,9 +153,9 @@
                 { text: 'done', color: 'green' },
                 { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'checking repository "E:\js_game 1"', color: 'white' },
+                { text: 'checking repository "E:\\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'Checking files in repository "E:\js_game 1"', color: 'white' },
+                { text: 'Checking files in repository "E:\\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
                 { text: 'found files:', color: 'green' },
                 { text: '"index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
@@ -226,7 +227,12 @@
             const yesBtn = document.createElement('button');
             yesBtn.className = 'btn green';
             yesBtn.textContent = 'ДА';
-            yesBtn.onclick = () => { question.textContent = 'Я ТАК И ЗНАЛ!!!'; yesBtn.style.display = 'none'; noBtn.style.display = 'none'; };
+            yesBtn.onclick = () => {
+                question.textContent = 'Я ТАК И ЗНАЛ!!!';
+                question.style.fontFamily = 'Minecraft, monospace'; // пиксельный шрифт
+                yesBtn.style.display = 'none';
+                noBtn.style.display = 'none';
+            };
 
             const noBtn = document.createElement('button');
             noBtn.className = 'btn red';
