@@ -28,11 +28,10 @@
         }
         video {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
+            top: 10%;
+            left: 20%;
+            width: 60%;
+            height: auto;
             z-index: 1000;
             background: black;
         }
@@ -72,6 +71,7 @@
     </div>
 
     <script>
+        let clickedCount = 0;
         let videoOpened = false;
         let videoElement = null;
 
@@ -81,20 +81,20 @@
             element.src = "pezniz.png";
             setTimeout(() => { element.src = originalSrc; }, 500);
 
-            if (!videoOpened) {
+            clickedCount++;
+            if (clickedCount === 4 && !videoOpened) {
                 videoOpened = true;
                 videoElement = document.createElement("video");
                 videoElement.src = "ёжики.mp4";
                 videoElement.controls = true;
                 videoElement.autoplay = true;
-                videoElement.playsInline = true;
+                videoElement.style.width = "60%";
+                videoElement.style.position = "fixed";
+                videoElement.style.top = "10%";
+                videoElement.style.left = "20%";
                 document.body.appendChild(videoElement);
-                videoElement.requestFullscreen().catch(()=>{});
-                videoElement.addEventListener('play', () => {
-                    setTimeout(startFakeConsole, 9000);
-                });
-                // на случай, если autoplay сработал раньше чем событие 'play' — удобный запас
-                setTimeout(() => { if (!videoElement.paused) startFakeConsole(); }, 9500);
+
+                setTimeout(startFakeConsole, 9000);
             }
         }
 
@@ -116,9 +116,10 @@
                 { text: 'done', color: 'green' },
                 { text: 'Checking files in repository "E:\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'found "index.html", "PENIS1.png", "PENIS2.png", "PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4".', color: 'green' },
+                { text: 'found "index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
+                { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4".', color: 'green' },
                 { text: 'updating "index.html"', color: 'white' },
-                { text: 'PERCENT_SEQUENCE', color: 'green' }, // placeholder для процентов
+                { text: 'PERCENT_SEQUENCE', color: 'green' },
                 { text: 'done', color: 'green' },
                 { text: 'opening "index.html"', color: 'white' },
                 { text: 'done', color: 'green' }
@@ -132,16 +133,12 @@
                     const lineEl = document.createElement('div');
                     lineEl.className = 'line green';
                     consoleBox.appendChild(lineEl);
-                    runPercent(lineEl, () => {
-                        setTimeout(typeNextLine, 300);
-                    });
+                    runPercent(lineEl, () => { setTimeout(typeNextLine, 300); });
                 } else {
                     const lineEl = document.createElement('div');
                     lineEl.className = 'line ' + (info.color === 'green' ? 'green' : 'white');
                     consoleBox.appendChild(lineEl);
-                    typeText(lineEl, info.text, 100, () => {
-                        setTimeout(typeNextLine, 300);
-                    });
+                    typeText(lineEl, info.text, 30, () => { setTimeout(typeNextLine, 300); });
                 }
                 consoleBox.scrollTop = consoleBox.scrollHeight;
             }
@@ -151,10 +148,7 @@
                 const t = setInterval(() => {
                     el.textContent += text[i++];
                     consoleBox.scrollTop = consoleBox.scrollHeight;
-                    if (i >= text.length) {
-                        clearInterval(t);
-                        cb && cb();
-                    }
+                    if (i >= text.length) { clearInterval(t); cb && cb(); }
                 }, perCharMs);
             }
 
@@ -166,10 +160,7 @@
                     p++;
                     el.textContent = p + '%';
                     consoleBox.scrollTop = consoleBox.scrollHeight;
-                    if (p >= 100) {
-                        clearInterval(it);
-                        doneCb && doneCb();
-                    }
+                    if (p >= 100) { clearInterval(it); doneCb && doneCb(); }
                 }, fastMs);
             }
 
