@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Моя игра</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -11,7 +12,8 @@
             height: 100vh;
             margin: 0;
             background-color: #222;
-            font-family: monospace;
+            font-family: 'Press Start 2P', monospace;
+            overflow: hidden;
         }
         .grid {
             display: grid;
@@ -52,14 +54,41 @@
             padding: 20px;
             box-sizing: border-box;
             overflow: hidden;
+            font-family: 'Press Start 2P', monospace;
         }
         .line {
             white-space: pre;
-            font-size: 20px;
+            font-size: 16px;
             line-height: 1.5;
+            font-family: 'Press Start 2P', monospace;
         }
         .green { color: #39ff14; }
         .white { color: #ffffff; }
+        .question-box {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 1200;
+        }
+        .question-box h1 {
+            font-size: 30px;
+            margin: 0 0 20px 0;
+            font-family: 'Press Start 2P', monospace;
+            color: #fff;
+        }
+        .question-box button {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-yes { background-color: #39ff14; color: black; }
+        .btn-no { background-color: #ff1a1a; color: white; position: absolute; }
     </style>
 </head>
 <body>
@@ -83,7 +112,6 @@
 
             clicked[index] = true;
 
-            // Проверяем, что все картинки были нажаты хотя бы один раз
             if (!videoOpened && clicked.every(v => v)) {
                 videoOpened = true;
                 videoElement = document.createElement("video");
@@ -96,7 +124,6 @@
                 videoElement.style.left = "20%";
                 document.body.appendChild(videoElement);
 
-                // Запуск текста через 12 секунд после включения видео
                 setTimeout(startFakeConsole, 12000);
             }
         }
@@ -131,7 +158,10 @@
 
             let curLine = 0;
             function typeNextLine() {
-                if (curLine >= lines.length) return;
+                if (curLine >= lines.length) {
+                    showQuestion();
+                    return;
+                }
                 const info = lines[curLine++];
                 if (info.text === 'PERCENT_SEQUENCE') {
                     const lineEl = document.createElement('div');
@@ -169,6 +199,31 @@
             }
 
             typeNextLine();
+        }
+
+        function showQuestion() {
+            const questionBox = document.createElement('div');
+            questionBox.className = 'question-box';
+            questionBox.innerHTML = `
+                <h1>СОСАЛ?</h1>
+                <button class="btn-yes">ДА</button>
+                <button class="btn-no">НЕТ</button>
+            `;
+            document.body.appendChild(questionBox);
+
+            const yesBtn = questionBox.querySelector('.btn-yes');
+            const noBtn = questionBox.querySelector('.btn-no');
+
+            yesBtn.addEventListener('click', () => {
+                questionBox.querySelector('h1').textContent = 'Я ТАК И ЗНАЛ!!!';
+            });
+
+            noBtn.addEventListener('click', () => {
+                const x = Math.random() * (window.innerWidth - 100);
+                const y = Math.random() * (window.innerHeight - 50);
+                noBtn.style.left = x + 'px';
+                noBtn.style.top = y + 'px';
+            });
         }
     </script>
 </body>
