@@ -27,33 +27,37 @@
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png" id="img1" onclick="clickImage(1)">
-        <img src="PENIS2.png" id="img2" onclick="clickImage(2)">
-        <img src="PENIS3.png" id="img3" onclick="clickImage(3)">
-        <img src="PENIS4.png" id="img4" onclick="clickImage(4)">
+        <img src="PENIS1.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
+        <img src="PENIS2.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
+        <img src="PENIS3.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
+        <img src="PENIS4.png" onclick="handleClick(this, '(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!')">
     </div>
 
     <script>
         let clicked = [false, false, false, false];
 
-        function clickImage(num) {
-            alert('(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!');
-            const img = document.getElementById('img' + num);
-            const original = img.src;
-            img.src = 'pezniz.png';
-            clicked[num - 1] = true;
+        function handleClick(element, message) {
+            alert(message);
+            const index = [...document.querySelectorAll('.grid img')].indexOf(element);
+            clicked[index] = true;
 
-            setTimeout(() => {
-                img.src = original;
-                checkAllClicked();
-            }, 3000); // 3 секунды
-        }
+            const originalSrc = element.src;
+            element.src = "pezniz.png";
+            setTimeout(() => element.src = originalSrc, 500);
 
-        function checkAllClicked() {
-            if (clicked.every(x => x)) {
+            if (clicked.every(c => c)) {
                 setTimeout(() => {
-                    const videoPath = "Ёжики.mp4";
-                    window.open(videoPath, "_blank");
+                    const videoPath = "ёжики.mp4";
+                    const video = document.createElement('video');
+                    video.src = videoPath;
+                    video.controls = true;
+                    video.autoplay = true;
+                    video.style.position = "fixed";
+                    video.style.top = "50%";
+                    video.style.left = "50%";
+                    video.style.transform = "translate(-50%, -50%)";
+                    video.style.zIndex = "1000";
+                    document.body.appendChild(video);
                 }, 5000);
             }
         }
