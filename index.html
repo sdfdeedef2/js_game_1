@@ -27,46 +27,36 @@
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png">
-        <img src="PENIS2.png">
-        <img src="PENIS3.png">
-        <img src="PENIS4.png">
+        <img src="PENIS1.png" id="img1" onclick="clickImage(1)">
+        <img src="PENIS2.png" id="img2" onclick="clickImage(2)">
+        <img src="PENIS3.png" id="img3" onclick="clickImage(3)">
+        <img src="PENIS4.png" id="img4" onclick="clickImage(4)">
     </div>
 
     <script>
-        const images = document.querySelectorAll('.grid img');
         let clicked = [false, false, false, false];
 
-        images.forEach((img, i) => {
-            img.addEventListener('click', () => {
-                const original = img.src;
-                img.src = 'pezniz.png';
+        function clickImage(num) {
+            alert('(ERROR_my_game1= 0) ЯРИК ВЕРНИ 3 ГРИВНЫ!!!');
+            const img = document.getElementById('img' + num);
+            const original = img.src;
+            img.src = 'pezniz.png';
+            clicked[num - 1] = true;
+
+            setTimeout(() => {
+                img.src = original;
+                checkAllClicked();
+            }, 3000); // 3 секунды
+        }
+
+        function checkAllClicked() {
+            if (clicked.every(x => x)) {
                 setTimeout(() => {
-                    img.src = original;
-                }, 500);
-
-                alert('(ERROR_my_game1= 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!');
-
-                clicked[i] = true;
-                if (clicked.every(v => v)) {
-                    setTimeout(() => {
-                        const videoPath = 'ёжики.mp4';
-                        const video = document.createElement('video');
-                        video.src = videoPath;
-                        video.controls = true;
-                        video.autoplay = true;
-                        video.style.width = '80%';
-                        video.style.height = '80%';
-                        video.style.position = 'fixed';
-                        video.style.top = '10%';
-                        video.style.left = '10%';
-                        video.style.zIndex = '9999';
-                        document.body.innerHTML = '';
-                        document.body.appendChild(video);
-                    }, 5000);
-                }
-            });
-        });
+                    const videoPath = "Ёжики.mp4";
+                    window.open(videoPath, "_blank");
+                }, 5000);
+            }
+        }
     </script>
 </body>
 </html>
