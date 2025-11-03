@@ -27,10 +27,24 @@
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png" onclick="alert('(my_game_test... error = 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!')">
-        <img src="PENIS2.png" onclick="alert('(my_game_test... error = 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!')">
-        <img src="PENIS3.png" onclick="alert('(my_game_test... error = 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!')">
-        <img src="PENIS4.png" onclick="alert('(my_game_test... error = 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!')">
+        <img src="PENIS1.png" onclick="clicked(1)" alt="">
+        <img src="PENIS2.png" onclick="clicked(2)" alt="">
+        <img src="PENIS3.png" onclick="clicked(3)" alt="">
+        <img src="PENIS4.png" onclick="clicked(4)" alt="">
     </div>
+
+    <script>
+        let clickedImages = new Set();
+
+        function clicked(num) {
+            alert('ЯРИК ВЕРНИ 3 ГРИВНЫ!!!');
+            clickedImages.add(num);
+            if (clickedImages.size === 4) {
+                setTimeout(() => {
+                    window.location.href = "ёжики.mp4";
+                }, 5000);
+            }
+        }
+    </script>
 </body>
 </html>
