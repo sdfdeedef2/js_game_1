@@ -27,24 +27,46 @@
 </head>
 <body>
     <div class="grid">
-        <img src="PENIS1.png" onclick="clicked(1)" alt="">
-        <img src="PENIS2.png" onclick="clicked(2)" alt="">
-        <img src="PENIS3.png" onclick="clicked(3)" alt="">
-        <img src="PENIS4.png" onclick="clicked(4)" alt="">
+        <img src="PENIS1.png">
+        <img src="PENIS2.png">
+        <img src="PENIS3.png">
+        <img src="PENIS4.png">
     </div>
 
     <script>
-        let clickedImages = new Set();
+        const images = document.querySelectorAll('.grid img');
+        let clicked = [false, false, false, false];
 
-        function clicked(num) {
-            alert('(ERROR_my_game1= 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!');
-            clickedImages.add(num);
-            if (clickedImages.size === 4) {
+        images.forEach((img, i) => {
+            img.addEventListener('click', () => {
+                const original = img.src;
+                img.src = 'pezniz.png';
                 setTimeout(() => {
-                    window.location.href = "ёжики.mp4";
-                }, 5000);
-            }
-        }
+                    img.src = original;
+                }, 500);
+
+                alert('(ERROR_my_game1= 0)ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!');
+
+                clicked[i] = true;
+                if (clicked.every(v => v)) {
+                    setTimeout(() => {
+                        const videoPath = 'ёжики.mp4';
+                        const video = document.createElement('video');
+                        video.src = videoPath;
+                        video.controls = true;
+                        video.autoplay = true;
+                        video.style.width = '80%';
+                        video.style.height = '80%';
+                        video.style.position = 'fixed';
+                        video.style.top = '10%';
+                        video.style.left = '10%';
+                        video.style.zIndex = '9999';
+                        document.body.innerHTML = '';
+                        document.body.appendChild(video);
+                    }, 5000);
+                }
+            });
+        });
     </script>
 </body>
 </html>
