@@ -1,251 +1,239 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Моя игра</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #222;
-            font-family: monospace;
-        }
+<meta charset="UTF-8">
+<title>Моя игра</title>
+<style>
+@font-face {
+    font-family: 'Minecraft';
+    src: url('minecraft.ttf') format('truetype'); /* добавь шрифт в директорию */
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #222;
+    font-family: monospace;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    z-index: 1;
+}
+.grid img {
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    border: 2px solid #fff;
+}
+video {
+    position: fixed;
+    top: 10%;
+    left: 20%;
+    width: 60%;
+    height: auto;
+    z-index: 1000;
+    background: black;
+}
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    color: #fff;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.console {
+    width: 90%;
+    max-width: 900px;
+    height: 70%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.line {
+    white-space: pre;
+    font-size: 20px;
+    line-height: 1.5;
+}
+.green { color: #39ff14; }
+.white { color: #ffffff; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 10px;
-            z-index: 1;
-        }
-
-        .grid img {
-            width: 150px;
-            height: 150px;
-            cursor: pointer;
-            border: 2px solid #fff;
-        }
-
-        video {
-            position: fixed;
-            top: 10%;
-            left: 20%;
-            width: 60%;
-            height: auto;
-            z-index: 1000;
-            background: black;
-        }
-
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: black;
-            color: #fff;
-            z-index: 1100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .console {
-            width: 90%;
-            max-width: 900px;
-            height: 70%;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow: hidden;
-            font-family: 'Press Start 2P', monospace; /* пиксельный шрифт для консоли */
-        }
-
-        .line {
-            white-space: pre;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .green { color: #39ff14; }
-        .white { color: #ffffff; }
-
-        /* Вопрос и кнопки */
-        .question {
-            font-family: 'Press Start 2P', monospace; /* пиксельный шрифт */
-            font-size: 40px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 50px;
-        }
-
-        .btn {
-            font-family: 'Press Start 2P', monospace; /* пиксельный шрифт */
-            font-size: 20px;
-            padding: 20px 40px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn.green { background-color: #39ff14; color: black; }
-        .btn.red { background-color: #ff2e2e; color: black; position: absolute; }
-
-        .btn:hover { transform: scale(1.05); }
-    </style>
+#questionText {
+    font-family: 'Minecraft', monospace;
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-align: center;
+}
+button {
+    font-family: 'Minecraft', monospace;
+    font-size: 24px;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+}
+#yesBtn { background-color: #39ff14; }
+#noBtn { background-color: #ff3939; position: absolute; }
+</style>
 </head>
 <body>
-    <div class="grid">
-        <img src="PENIS1.png" onclick="handleClick(this, 0)">
-        <img src="PENIS2.png" onclick="handleClick(this, 1)">
-        <img src="PENIS3.png" onclick="handleClick(this, 2)">
-        <img src="PENIS4.png" onclick="handleClick(this, 3)">
-    </div>
+<div class="grid">
+    <img src="PENIS1.png" onclick="handleClick(this, 0)">
+    <img src="PENIS2.png" onclick="handleClick(this, 1)">
+    <img src="PENIS3.png" onclick="handleClick(this, 2)">
+    <img src="PENIS4.png" onclick="handleClick(this, 3)">
+</div>
 
-    <script>
-        const clicked = [false, false, false, false];
-        let videoOpened = false;
-        let videoElement = null;
+<script>
+const clicked = [false, false, false, false];
+let videoOpened = false;
+let videoElement = null;
 
-        function handleClick(element, index) {
-            alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
-            const originalSrc = element.src;
-            element.src = "pezniz.png";
-            setTimeout(() => { element.src = originalSrc; }, 500);
+function handleClick(element, index) {
+    alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
+    const originalSrc = element.src;
+    element.src = "pezniz.png";
+    setTimeout(() => { element.src = originalSrc; }, 500);
 
-            clicked[index] = true;
+    clicked[index] = true;
 
-            if (!videoOpened && clicked.every(v => v)) {
-                videoOpened = true;
-                videoElement = document.createElement("video");
-                videoElement.src = "ёжики.mp4";
-                videoElement.controls = true;
-                videoElement.autoplay = true;
-                videoElement.style.width = "60%";
-                videoElement.style.position = "fixed";
-                videoElement.style.top = "10%";
-                videoElement.style.left = "20%";
-                document.body.appendChild(videoElement);
+    if (!videoOpened && clicked.every(v => v)) {
+        videoOpened = true;
+        videoElement = document.createElement("video");
+        videoElement.src = "ёжики.mp4";
+        videoElement.controls = true;
+        videoElement.autoplay = true;
+        videoElement.style.width = "60%";
+        videoElement.style.position = "fixed";
+        videoElement.style.top = "10%";
+        videoElement.style.left = "20%";
+        document.body.appendChild(videoElement);
 
-                setTimeout(() => {
-                    videoElement.pause();
-                    startFakeConsole();
-                }, 12000); // 12 секунд до текста
-            }
+        setTimeout(startFakeConsole, 12000);
+    }
+}
+
+function startFakeConsole() {
+    if (videoElement) videoElement.pause();
+    if (document.querySelector('.overlay')) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    const consoleBox = document.createElement('div');
+    consoleBox.className = 'console';
+    overlay.appendChild(consoleBox);
+    document.body.appendChild(overlay);
+
+    const lines = [
+        { text: 'download file "cocal"', color: 'white' },
+        { text: 'done', color: 'green' },
+        { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
+        { text: 'done', color: 'green' },
+        { text: 'checking repository "E:\\js_game 1"', color: 'white' },
+        { text: 'done', color: 'green' },
+        { text: 'Checking files in repository "E:\\js_game 1"', color: 'white' },
+        { text: 'done', color: 'green' },
+        { text: 'found files:', color: 'green' },
+        { text: '"index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
+        { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color: 'green' },
+        { text: 'updating "index.html"', color: 'white' },
+        { text: 'PERCENT_SEQUENCE', color: 'green' },
+        { text: 'done', color: 'green' },
+        { text: 'opening "index.html"', color: 'white' },
+        { text: 'done', color: 'green' }
+    ];
+
+    let curLine = 0;
+    function typeNextLine() {
+        if (curLine >= lines.length) {
+            showQuestion();
+            return;
         }
-
-        function startFakeConsole() {
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            const consoleBox = document.createElement('div');
-            consoleBox.className = 'console';
-            overlay.appendChild(consoleBox);
-            document.body.appendChild(overlay);
-
-            const lines = [
-                { text: 'download file "cocal"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'checking repository "E:\\js_game 1"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'Checking files in repository "E:\\js_game 1"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'found files:', color: 'green' },
-                { text: '"index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
-                { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color: 'green' },
-                { text: 'updating "index.html"', color: 'white' },
-                { text: 'PERCENT_SEQUENCE', color: 'green' },
-                { text: 'done', color: 'green' },
-                { text: 'opening "index.html"', color: 'white' },
-                { text: 'done', color: 'green' }
-            ];
-
-            let curLine = 0;
-            function typeNextLine() {
-                if (curLine >= lines.length) {
-                    showQuestion();
-                    return;
-                }
-                const info = lines[curLine++];
-                if (info.text === 'PERCENT_SEQUENCE') {
-                    const lineEl = document.createElement('div');
-                    lineEl.className = 'line green';
-                    consoleBox.appendChild(lineEl);
-                    runPercent(lineEl, () => { setTimeout(typeNextLine, 300); });
-                } else {
-                    const lineEl = document.createElement('div');
-                    lineEl.className = 'line ' + (info.color === 'green' ? 'green' : 'white');
-                    consoleBox.appendChild(lineEl);
-                    typeText(lineEl, info.text, 30, () => { setTimeout(typeNextLine, 300); });
-                }
-                consoleBox.scrollTop = consoleBox.scrollHeight;
-            }
-
-            function typeText(el, text, perCharMs, cb) {
-                let i = 0;
-                const t = setInterval(() => {
-                    el.textContent += text[i++];
-                    consoleBox.scrollTop = consoleBox.scrollHeight;
-                    if (i >= text.length) { clearInterval(t); cb && cb(); }
-                }, perCharMs);
-            }
-
-            function runPercent(el, doneCb) {
-                let p = 1;
-                el.textContent = p + '%';
-                const fastMs = 30;
-                const it = setInterval(() => {
-                    p++;
-                    el.textContent = p + '%';
-                    consoleBox.scrollTop = consoleBox.scrollHeight;
-                    if (p >= 100) { clearInterval(it); doneCb && doneCb(); }
-                }, fastMs);
-            }
-
-            typeNextLine();
+        const info = lines[curLine++];
+        if (info.text === 'PERCENT_SEQUENCE') {
+            const lineEl = document.createElement('div');
+            lineEl.className = 'line green';
+            consoleBox.appendChild(lineEl);
+            runPercent(lineEl, () => { setTimeout(typeNextLine, 300); });
+        } else {
+            const lineEl = document.createElement('div');
+            lineEl.className = 'line ' + (info.color === 'green' ? 'green' : 'white');
+            consoleBox.appendChild(lineEl);
+            typeText(lineEl, info.text, 30, () => { setTimeout(typeNextLine, 300); });
         }
+        consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
 
-        function showQuestion() {
-            const overlay = document.querySelector('.overlay');
-            overlay.innerHTML = '';
+    function typeText(el, text, perCharMs, cb) {
+        let i = 0;
+        const t = setInterval(() => {
+            el.textContent += text[i++];
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+            if (i >= text.length) { clearInterval(t); cb && cb(); }
+        }, perCharMs);
+    }
 
-            const question = document.createElement('div');
-            question.className = 'question';
-            question.textContent = 'СОСАЛ?';
-            overlay.appendChild(question);
+    function runPercent(el, doneCb) {
+        let p = 1;
+        el.textContent = p + '%';
+        const fastMs = 30;
+        const it = setInterval(() => {
+            p++;
+            el.textContent = p + '%';
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+            if (p >= 100) { clearInterval(it); doneCb && doneCb(); }
+        }, fastMs);
+    }
 
-            const buttons = document.createElement('div');
-            buttons.className = 'buttons';
+    typeNextLine();
+}
 
-            const yesBtn = document.createElement('button');
-            yesBtn.className = 'btn green';
-            yesBtn.textContent = 'ДА';
-            yesBtn.onclick = () => {
-                question.textContent = 'Я ТАК И ЗНАЛ!!!';
-                question.style.fontFamily = 'Press Start 2P, monospace'; // пиксельный шрифт
-                yesBtn.style.display = 'none';
-                noBtn.style.display = 'none';
-            };
+function showQuestion() {
+    const overlay = document.querySelector('.overlay');
+    if (!overlay) return;
+    overlay.innerHTML = '';
 
-            const noBtn = document.createElement('button');
-            noBtn.className = 'btn red';
-            noBtn.textContent = 'НЕТ';
-            noBtn.onclick = () => {
-                noBtn.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-                noBtn.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-            };
+    const question = document.createElement('div');
+    question.id = 'questionText';
+    question.textContent = 'СОСАЛ?';
+    overlay.appendChild(question);
 
-            buttons.appendChild(yesBtn);
-            buttons.appendChild(noBtn);
-            overlay.appendChild(buttons);
-        }
-    </script>
+    const yesBtn = document.createElement('button');
+    yesBtn.id = 'yesBtn';
+    yesBtn.textContent = 'ДА';
+    yesBtn.addEventListener('click', () => {
+        question.textContent = 'Я ТАК И ЗНАЛ!!!';
+
+        const link = document.createElement('a');
+        link.href = 'yuarick.jpg';
+        link.download = 'yuarick.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+    overlay.appendChild(yesBtn);
+
+    const noBtn = document.createElement('button');
+    noBtn.id = 'noBtn';
+    noBtn.textContent = 'НЕТ';
+    noBtn.addEventListener('click', () => {
+        const maxX = window.innerWidth - noBtn.offsetWidth;
+        const maxY = window.innerHeight - noBtn.offsetHeight;
+        noBtn.style.left = Math.random() * maxX + 'px';
+        noBtn.style.top = Math.random() * maxY + 'px';
+        noBtn.style.position = 'absolute';
+    });
+    overlay.appendChild(noBtn);
+}
+</script>
 </body>
 </html>
