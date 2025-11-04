@@ -19,13 +19,13 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 10px;
+            gap: 20px;
             z-index: 1;
         }
 
         .grid img {
-            width: 150px;
-            height: 150px;
+            width: 250px;   /* увеличена ширина */
+            height: 250px;  /* увеличена высота */
             cursor: pointer;
             border: 2px solid #fff;
         }
@@ -71,7 +71,6 @@
         .green { color: #39ff14; }
         .white { color: #ffffff; }
 
-        /* Вопрос и кнопки */
         .question {
             font-family: 'Press Start 2P', monospace;
             font-size: 40px;
@@ -86,8 +85,8 @@
 
         .btn {
             font-family: 'Press Start 2P', monospace;
-            font-size: 20px;
-            padding: 20px 40px;
+            font-size: 26px;        /* увеличен шрифт для кнопок */
+            padding: 30px 60px;     /* увеличен padding */
             border: none;
             border-radius: 20px;
             cursor: pointer;
@@ -153,9 +152,9 @@
                 { text: 'done', color: 'green' },
                 { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'checking repository "E:\js_game 1"', color: 'white' },
+                { text: 'checking repository "E:\\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'Checking files in repository "E:\js_game 1"', color: 'white' },
+                { text: 'Checking files in repository "E:\\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
                 { text: 'found files:', color: 'green' },
                 { text: '"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color: 'green' },
@@ -233,7 +232,6 @@
                 yesBtn.style.display = 'none';
                 noBtn.style.display = 'none';
 
-                
                 const link = document.createElement('a');
                 link.href = 'yuarick.jpg';
                 link.download = 'yuarick.jpg';
@@ -246,8 +244,8 @@
             noBtn.className = 'btn red';
             noBtn.textContent = 'НЕТ';
             noBtn.onclick = () => {
-                noBtn.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-                noBtn.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+                noBtn.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+                noBtn.style.left = Math.random() * (window.innerWidth - 300) + 'px';
             };
 
             buttons.appendChild(yesBtn);
