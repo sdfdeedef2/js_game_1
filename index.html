@@ -414,6 +414,7 @@ function showPaymentQuestion(){
   buttonsWrap.appendChild(noPayBtn);
   buttonsWrap.appendChild(payBtn);
 
+  // поведение кнопки "Не платить"
   noPayBtn.addEventListener('click', ()=>{
     const ovConsole = createOverlay();
     ovConsole.innerHTML = '';
@@ -427,11 +428,14 @@ function showPaymentQuestion(){
     ovConsole.appendChild(consoleBox);
 
     const time = new Date().toLocaleTimeString();
-    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены пользователю sdfdeedef2 в ${time}`, 'red', 20, ()=>{
-      setTimeout(()=> playDeBabkiVideo(), 1500);
+    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены`, 'red', 20, () => {
+      writeConsoleLine(consoleBox, `пользователю sdfdeedef2 в ${time}`, 'red', 20, () => {
+        setTimeout(() => playDeBabkiVideo(), 1500);
+      });
     });
-  });
+  }); // ← вот эта скобка была потеряна
 
+  // поведение кнопки "Оплатить"
   payBtn.addEventListener('click', ()=>{
     const ovConsole = createOverlay();
     ovConsole.innerHTML = '';
@@ -444,51 +448,3 @@ function showPaymentQuestion(){
     });
   });
 }
-
-/* ========== Идея 3 — финальное видео (de_babki.mp4) и закрытие вкладки / fallback ========== */
-function playDeBabkiVideo(){
-  const ov = createOverlay();
-  ov.innerHTML = '';
-  const video = document.createElement('video');
-  video.src = 'de_babki.mp4';
-  video.autoplay = true;
-  video.controls = false;
-  video.style.width = '90%';
-  video.style.maxWidth = '1000px';
-  ov.appendChild(video);
-
-  // когда видео закончится — сразу пробуем закрыть вкладку (после полного проигрыша)
-  video.addEventListener('ended', ()=>{
-    setTimeout(()=>{
-      try{
-        window.close();
-        // если window.close() не закрыл вкладку — показываем fallback через небольшой таймаут
-        setTimeout(()=>{ showBlackFallback(); }, 500);
-      }catch(e){
-        showBlackFallback();
-      }
-    }, 0);
-  });
-
-  // safety: попытка автозапуска, если заблокировано
-  setTimeout(()=>{
-    if(video.paused){
-      try{ video.play(); }catch(e){}
-    }
-  }, 800);
-}
-
-/* показываем черный экран с надписью "БАБКИ ДАЙ" */
-function showBlackFallback(){
-  removeOverlay();
-  const black = document.createElement('div');
-  black.className = 'black-screen';
-  black.innerHTML = `<div class="text">БАБКИ ДАЙ</div>`;
-  document.body.appendChild(black);
-}
-
-/* ========== Инициализация ========== */
-/* Логика запускается по кликам — инициализация не нужна */
-</script>
-</body>
-</html>
