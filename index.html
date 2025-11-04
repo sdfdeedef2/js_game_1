@@ -389,7 +389,7 @@ function showSosalsQuestion(mode='both'){
 }
 
 /* ========== Вопрос об оплате (идея 2) ========== */
-function showPaymentQuestion() {
+function showPaymentQuestion(){
   const ov = createOverlay();
   ov.innerHTML = '';
 
@@ -410,43 +410,44 @@ function showPaymentQuestion() {
   payBtn.className = 'btn green';
   payBtn.textContent = 'Оплатить';
 
+  // порядок: сначала noPayBtn (слева), затем payBtn (справа)
   buttonsWrap.appendChild(noPayBtn);
   buttonsWrap.appendChild(payBtn);
 
-  noPayBtn.addEventListener('click', () => {
+  noPayBtn.addEventListener('click', ()=>{
     const ovConsole = createOverlay();
     ovConsole.innerHTML = '';
     const consoleBox = document.createElement('div');
     consoleBox.className = 'console';
+    // делаем текст красным и с переносом
     consoleBox.style.color = 'red';
     consoleBox.style.wordBreak = 'break-word';
     consoleBox.style.textAlign = 'center';
     consoleBox.style.fontSize = '18px';
     ovConsole.appendChild(consoleBox);
-
     const time = new Date().toLocaleTimeString();
-    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены`, 'red', 20, () => {
-      writeConsoleLine(consoleBox, `пользователю sdfdeedef2 в ${time}`, 'red', 20, () => {
-        setTimeout(() => playDeBabkiVideo(), 1500);
-      });
+    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены`, 'red', 20, ()=>{
+      writeConsoleLine(consoleBox, `пользователем sdfdeedef2 в ${time}`, 'red', 20, ()=>{
+      setTimeout(()=> playDeBabkiVideo(), 1500);
     });
-  }); // ← вот тут была лишняя/нехватающая скобка
+    });
+  });
 
-  payBtn.addEventListener('click', () => {
+  payBtn.addEventListener('click', ()=>{
     const ovConsole = createOverlay();
     ovConsole.innerHTML = '';
     const consoleBox = document.createElement('div');
     consoleBox.className = 'console';
     ovConsole.appendChild(consoleBox);
 
-    writeConsoleLine(consoleBox, 'Бабки давай, а то у твоей мамы сворую', 'green', 20, () => {
-      setTimeout(() => playDeBabkiVideo(), 1500);
+    writeConsoleLine(consoleBox, 'Бабки давай, а то у твоей мамы сворую', 'green', 20, ()=>{
+      setTimeout(()=> playDeBabkiVideo(), 1500);
     });
   });
 }
 
 /* ========== Идея 3 — финальное видео (de_babki.mp4) и закрытие вкладки / fallback ========== */
-function playDeBabkiVideo() {
+function playDeBabkiVideo(){
   const ov = createOverlay();
   ov.innerHTML = '';
   const video = document.createElement('video');
@@ -457,28 +458,38 @@ function playDeBabkiVideo() {
   video.style.maxWidth = '1000px';
   ov.appendChild(video);
 
-  video.addEventListener('ended', () => {
-    setTimeout(() => {
-      try {
+  // когда видео закончится — сразу пробуем закрыть вкладку (после полного проигрыша)
+  video.addEventListener('ended', ()=>{
+    setTimeout(()=>{
+      try{
         window.close();
-        setTimeout(() => { showBlackFallback(); }, 500);
-      } catch (e) {
+        // если window.close() не закрыл вкладку — показываем fallback через небольшой таймаут
+        setTimeout(()=>{ showBlackFallback(); }, 500);
+      }catch(e){
         showBlackFallback();
       }
     }, 0);
   });
 
-  setTimeout(() => {
-    if (video.paused) {
-      try { video.play(); } catch (e) {}
+  // safety: попытка автозапуска, если заблокировано
+  setTimeout(()=>{
+    if(video.paused){
+      try{ video.play(); }catch(e){}
     }
   }, 800);
 }
 
-function showBlackFallback() {
+/* показываем черный экран с надписью "БАБКИ ДАЙ" */
+function showBlackFallback(){
   removeOverlay();
   const black = document.createElement('div');
   black.className = 'black-screen';
   black.innerHTML = `<div class="text">БАБКИ ДАЙ</div>`;
   document.body.appendChild(black);
 }
+
+/* ========== Инициализация ========== */
+/* Логика запускается по кликам — инициализация не нужна */
+</script>
+</body>
+</html>
