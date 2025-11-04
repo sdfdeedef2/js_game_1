@@ -1,298 +1,466 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
 <title>Моя игра</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #222;
-    font-family: monospace;
-}
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px;
-    z-index: 1;
-}
-.grid img {
-    width: 250px;
-    height: 250px;
-    cursor: pointer;
-    border: 2px solid #fff;
-}
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: black;
-    color: #fff;
-    z-index: 1100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-.console {
-    width: 90%;
-    max-width: 900px;
-    height: 70%;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow: hidden;
-    font-family: 'Press Start 2P', monospace;
-}
-.line { white-space: pre; font-size: 16px; line-height: 1.5; }
-.green { color: #39ff14; }
-.white { color: #ffffff; }
-.question {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 40px;
-    margin-bottom: 30px;
-    text-align: center;
-}
-.buttons { display: flex; gap: 50px; }
-.btn {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 26px;
-    padding: 30px 60px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.btn.green { background-color: #39ff14; color: black; }
-.btn.red { background-color: #ff2e2e; color: black; position: absolute; }
-.btn:hover { transform: scale(1.05); }
+  :root{--green:#39ff14;--red:#ff2e2e}
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#222;
+    font-family:monospace;
+    overflow:hidden;
+  }
+  .grid{
+    z-index:2;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    gap:20px;
+  }
+  .grid img{
+    width:250px;
+    height:250px;
+    cursor:pointer;
+    border:2px solid #fff;
+    object-fit:cover;
+    background:#000;
+  }
+  video.main {
+    position:fixed;
+    top:5%;
+    left:10%;
+    width:80%;
+    height:auto;
+    z-index:1; /* ниже grid, но мы будем скрывать grid при старте видео */
+    background:black;
+  }
+
+  /* overlay / консоль / вопросы */
+  .overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:rgba(0,0,0,0.95);
+    z-index:1100;
+  }
+  .console{
+    width:90%;
+    max-width:900px;
+    height:70%;
+    padding:20px;
+    box-sizing:border-box;
+    overflow:auto;
+    font-family:'Press Start 2P',monospace;
+    color:#fff;
+  }
+  .line{ white-space:pre; font-size:16px; line-height:1.5; }
+  .green{ color:var(--green); }
+  .white{ color:#fff; }
+
+  .question{
+    font-family:'Press Start 2P',monospace;
+    font-size:40px;
+    margin-bottom:20px;
+    text-align:center;
+    color:#fff;
+  }
+  .buttons{ display:flex; gap:40px; align-items:center; justify-content:center; }
+
+  .btn{
+    font-family:'Press Start 2P',monospace;
+    font-size:20px;
+    padding:18px 40px;
+    border-radius:18px;
+    border:none;
+    cursor:pointer;
+    transition:transform .12s;
+  }
+  .btn:active{ transform:scale(.98); }
+  .btn.green{ background:var(--green); color:#000; }
+  .btn.red{ background:var(--red); color:#000; position:relative; }
+
+  /* trail effect for fleeing button */
+  .trail{
+    position:fixed;
+    pointer-events:none;
+    opacity:.6;
+    filter:blur(0.5px);
+    mix-blend-mode:screen;
+    animation:fadeTrail 600ms linear forwards;
+    z-index:1200;
+  }
+  @keyframes fadeTrail{
+    from{ transform:translateY(0); opacity:.6; }
+    to{ transform:translateY(-10px); opacity:0; }
+  }
+
+  /* big insult style */
+  .big-insult{
+    font-family:'Press Start 2P',monospace;
+    color:#ff4d4d;
+    font-size:28px;
+    text-align:center;
+    z-index:1200;
+  }
+
+  /* fallback black screen */
+  .black-screen{
+    position:fixed; inset:0; background:#000; display:flex; align-items:center; justify-content:center; z-index:2000;
+  }
+  .black-screen .text{ font-family:'Press Start 2P',monospace; color:#ff4d4d; font-size:36px; text-align:center; }
 </style>
 </head>
 <body>
-<div class="grid">
+  <div class="grid" id="grid">
     <img src="PENIS1.png" onclick="handleClick(this,0)">
     <img src="PENIS2.png" onclick="handleClick(this,1)">
     <img src="PENIS3.png" onclick="handleClick(this,2)">
     <img src="PENIS4.png" onclick="handleClick(this,3)">
-</div>
+  </div>
+
+  <!-- main video (ёжики) -->
+  <!-- вставляем динамически как <video class="main"> в JS -->
+  <!-- audio preload for loh sound -->
+  <audio id="lohAudio" src="yuarick_loh.mp3" preload="auto"></audio>
 
 <script>
-let clicked=[false,false,false,false];
-let videoOpened=false;
-let videoElement=null;
-let noClickCount=0;
+/* ========== Переменные ========== */
+const clicked = [false,false,false,false];
+let videoOpened = false;
+let mainVideo = null;
+let noClickCount = 0;
 
-function handleClick(element,index){
-    alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
-    const originalSrc=element.src;
-    element.src="pezniz.png";
-    setTimeout(()=>{element.src=originalSrc},500);
-    clicked[index]=true;
-    if(!videoOpened && clicked.every(v=>v)){
-        videoOpened=true;
-        videoElement=document.createElement("video");
-        videoElement.src="ёжики.mp4";
-        videoElement.controls=true;
-        videoElement.autoplay=true;
-        videoElement.style.width="80%";
-        videoElement.style.position="fixed";
-        videoElement.style.top="5%";
-        videoElement.style.left="10%";
-        document.body.appendChild(videoElement);
-        setTimeout(()=>{
-            videoElement.pause();
-            startFakeConsole();
-        },12000);
-    }
+/* ---------- Утилиты ---------- */
+function createOverlay() {
+  // если уже есть — вернём, иначе создадим
+  let ov = document.querySelector('.overlay');
+  if(ov) return ov;
+  ov = document.createElement('div');
+  ov.className = 'overlay';
+  document.body.appendChild(ov);
+  return ov;
+}
+function removeOverlay(){
+  const ov = document.querySelector('.overlay');
+  if(ov) ov.remove();
+}
+function writeConsoleLine(consoleBox, text, color='white', perChar=30, cb){
+  const el = document.createElement('div');
+  el.className = 'line ' + (color==='green' ? 'green' : 'white');
+  consoleBox.appendChild(el);
+  let i=0;
+  const t = setInterval(()=>{
+    // safety: if text longer than index, guard
+    if(i < text.length) el.textContent += text[i++];
+    consoleBox.scrollTop = consoleBox.scrollHeight;
+    if(i>=text.length){ clearInterval(t); cb && cb(); }
+  }, perChar);
 }
 
+/* ========== Обработчики основного экрана ========== */
+function handleClick(imgEl, idx){
+  // эффект замены на pezniz
+  const original = imgEl.src;
+  imgEl.src = 'pezniz.png';
+  setTimeout(()=>{ imgEl.src = original }, 500);
+
+  clicked[idx] = true;
+
+  if(!videoOpened && clicked.every(v=>v)){
+    videoOpened = true;
+    // спрячем grid (ты просил: кнопки скрываются после всех 4 кликов)
+    const grid = document.getElementById('grid');
+    if(grid) grid.style.display = 'none';
+
+    // создаём и запускаем видео (ёжики)
+    mainVideo = document.createElement('video');
+    mainVideo.className = 'main';
+    mainVideo.src = 'ёжики.mp4';
+    mainVideo.autoplay = true;
+    mainVideo.controls = true;
+    mainVideo.playsInline = true;
+    document.body.appendChild(mainVideo);
+
+    // через 12 секунд показать консоль (ты просил 12 сек после включения видео)
+    setTimeout(()=>{
+      // ставим на паузу видео и показываем консоль
+      try{ mainVideo.pause(); } catch(e){}
+      startFakeConsole();
+    }, 12000);
+  }
+}
+
+/* ========== Консоль и печать ========== */
 function startFakeConsole(){
-    const overlay=document.createElement('div');
-    overlay.className='overlay';
-    const consoleBox=document.createElement('div');
-    consoleBox.className='console';
-    overlay.appendChild(consoleBox);
-    document.body.appendChild(overlay);
+  const ov = createOverlay();
+  ov.innerHTML = '';
+  const consoleBox = document.createElement('div');
+  consoleBox.className = 'console';
+  ov.appendChild(consoleBox);
 
-    const lines=[
-        {text:'download file "cocal"', color:'white'},
-        {text:'done', color:'green'},
-        {text:'Checking user profile "sdfdeedef2"', color:'white'},
-        {text:'done', color:'green'},
-        {text:'checking repository "E:\\js_game 1"', color:'white'},
-        {text:'done', color:'green'},
-        {text:'Checking files in repository "E:\\js_game 1"', color:'white'},
-        {text:'done', color:'green'},
-        {text:'found files:', color:'green'},
-        {text:'"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color:'green'},
-        {text:'"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color:'green'},
-        {text:'updating "index.html"', color:'white'},
-        {text:'PERCENT_SEQUENCE', color:'green'},
-        {text:'done', color:'green'},
-        {text:'opening "index.html"', color:'white'},
-        {text:'done', color:'green'}
-    ];
+  const lines = [
+    {text:'download file "cocal"', color:'white'},
+    {text:'done', color:'green'},
+    {text:'Checking user profile "sdfdeedef2"', color:'white'},
+    {text:'done', color:'green'},
+    {text:'checking repository "E:\\js_game 1"', color:'white'},
+    {text:'done', color:'green'},
+    {text:'Checking files in repository "E:\\js_game 1"', color:'white'},
+    {text:'done', color:'green'},
+    {text:'found files:', color:'green'},
+    {text:'"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color:'green'},
+    {text:'"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color:'green'},
+    {text:'updating "index.html"', color:'white'},
+    {text:'PERCENT_SEQUENCE', color:'green'},
+    {text:'done', color:'green'},
+    {text:'opening "index.html"', color:'white'},
+    {text:'done', color:'green'}
+  ];
 
-    let curLine=0;
-    function typeNextLine(){
-        if(curLine>=lines.length){ showQuestion(); return;}
-        const info=lines[curLine++];
-        if(info.text==='PERCENT_SEQUENCE'){
-            const lineEl=document.createElement('div');
-            lineEl.className='line green';
-            consoleBox.appendChild(lineEl);
-            runPercent(lineEl,()=>{setTimeout(typeNextLine,300)});
-        }else{
-            const lineEl=document.createElement('div');
-            lineEl.className='line '+(info.color==='green'?'green':'white');
-            consoleBox.appendChild(lineEl);
-            typeText(lineEl,info.text,100,()=>{setTimeout(typeNextLine,300)});
-        }
-        consoleBox.scrollTop=consoleBox.scrollHeight;
+  let cur=0;
+  function next(){
+    if(cur>=lines.length){
+      // после консоли — показываем вопрос "СОСАЛ?"
+      setTimeout(()=> showSosalsQuestion(), 300);
+      return;
     }
-
-    function typeText(el,text,perCharMs,cb){
-        let i=0;
-        const t=setInterval(()=>{
-            el.textContent+=text[i++];
-            consoleBox.scrollTop=consoleBox.scrollHeight;
-            if(i>=text.length){clearInterval(t); cb && cb();}
-        },perCharMs);
+    const info = lines[cur++];
+    if(info.text === 'PERCENT_SEQUENCE'){
+      const percentEl = document.createElement('div');
+      percentEl.className = 'line green';
+      consoleBox.appendChild(percentEl);
+      runPercent(percentEl, ()=> setTimeout(next,300));
+    } else {
+      writeConsoleLine(consoleBox, info.text, info.color==='green' ? 'green' : 'white', 40, ()=> setTimeout(next,300));
     }
-
-    function runPercent(el,doneCb){
-        let p=1;
-        el.textContent=p+'%';
-        const fastMs=30;
-        const it=setInterval(()=>{
-            p++;
-            el.textContent=p+'%';
-            consoleBox.scrollTop=consoleBox.scrollHeight;
-            if(p>=100){clearInterval(it); doneCb && doneCb();}
-        },fastMs);
-    }
-    typeNextLine();
+  }
+  next();
 }
 
-function showQuestion(){
-    const overlay=document.querySelector('.overlay');
-    overlay.innerHTML='';
-
-    const question=document.createElement('div');
-    question.className='question';
-    question.textContent='СОСАЛ?';
-    overlay.appendChild(question);
-
-    const buttons=document.createElement('div');
-    buttons.className='buttons';
-
-    const yesBtn=document.createElement('button');
-    yesBtn.className='btn green';
-    yesBtn.textContent='ДА';
-
-    const noBtn=document.createElement('button');
-    noBtn.className='btn red';
-    noBtn.textContent='НЕТ';
-
-    yesBtn.onclick=()=>{ 
-        question.textContent='Я ТАК И ЗНАЛ!!!';
-        yesBtn.style.display='none';
-        noBtn.style.display='none';
-        showPayOptions();
-    };
-
-    noBtn.onclick=()=>{
-        noClickCount++;
-        if(noClickCount>=5 && noClickCount<15){
-            const audio=new Audio('yuarick_loh.mp3');
-            audio.play();
-        }
-        if(noClickCount===15){
-            noBtn.style.display='none';
-            const text=document.createElement('div');
-            text.className='question';
-            text.textContent='ДА ЛАДНО ТЫ ЛОХ КОТОРЫЙ СОСАЛ!!!';
-            overlay.appendChild(text);
-            setTimeout(()=>{
-                text.remove();
-                showPayOptions();
-            },1000);
-        }else{
-            noBtn.style.top=Math.random()*(window.innerHeight-150)+'px';
-            noBtn.style.left=Math.random()*(window.innerWidth-300)+'px';
-        }
-    };
-
-    buttons.appendChild(yesBtn);
-    buttons.appendChild(noBtn);
-    overlay.appendChild(buttons);
+function runPercent(el, cb){
+  let p=1;
+  el.textContent = p + '%';
+  const it = setInterval(()=>{
+    p++;
+    el.textContent = p + '%';
+    if(p>=100){ clearInterval(it); cb && cb(); }
+  }, 20);
 }
 
-// --- Идея 2 ---
-function showPayOptions(){
-    const overlay=document.querySelector('.overlay');
-    overlay.innerHTML='';
+/* ========== Вопрос "СОСАЛ?" (идея 1 + скачивание при ДА) ========== */
+function showSosalsQuestion(){
+  const ov = createOverlay();
+  ov.innerHTML = ''; // очистили консоль/оверлей
 
-    const question=document.createElement('div');
-    question.className='question';
-    question.textContent='Оплатишь 3 гривны?';
-    overlay.appendChild(question);
+  const question = document.createElement('div');
+  question.className = 'question';
+  question.textContent = 'СОСАЛ?';
+  ov.appendChild(question);
 
-    const buttons=document.createElement('div');
-    buttons.className='buttons';
+  const buttonsWrap = document.createElement('div');
+  buttonsWrap.className = 'buttons';
+  ov.appendChild(buttonsWrap);
 
-    const payBtn=document.createElement('button');
-    payBtn.className='btn green';
-    payBtn.textContent='Оплатить';
+  const yesBtn = document.createElement('button');
+  yesBtn.className = 'btn green';
+  yesBtn.textContent = 'ДА';
 
-    const noPayBtn=document.createElement('button');
-    noPayBtn.className='btn red';
-    noPayBtn.textContent='Не платить';
+  const noBtn = document.createElement('button');
+  noBtn.className = 'btn red';
+  noBtn.textContent = 'НЕТ';
 
-    payBtn.onclick=()=>{
-        alert('Бабки давай а то у твоей мамы сворую');
-        overlay.innerHTML='';
-        playFinalVideo();
-    };
+  // поведение кнопки НЕТ: убегает с эффектом следа и считает клики
+  noBtn.addEventListener('click', ()=>{
+    noClickCount++;
+    // играем звук только начиная с 5-го клика
+    if(noClickCount >= 5){
+      try{ document.getElementById('lohAudio').currentTime = 0; document.getElementById('lohAudio').play(); }catch(e){}
+    }
 
-    noPayBtn.onclick=()=>{
-        const time=new Date().toLocaleTimeString();
-        alert(`3 гривны из кредитки твоей мамы были перенесены пользователь sdfdeedef2 в ${time}`);
-        overlay.innerHTML='';
-        playFinalVideo();
-    };
+    // создаём след (клонируем кнопку в позицию и анимируем исчезание)
+    const rect = noBtn.getBoundingClientRect();
+    const trail = noBtn.cloneNode(true);
+    trail.className = 'trail';
+    trail.style.left = rect.left + 'px';
+    trail.style.top = rect.top + 'px';
+    trail.style.width = rect.width + 'px';
+    trail.style.height = rect.height + 'px';
+    trail.style.borderRadius = getComputedStyle(noBtn).borderRadius;
+    trail.style.display = 'flex';
+    trail.style.alignItems = 'center';
+    trail.style.justifyContent = 'center';
+    trail.style.fontFamily = 'Press Start 2P,monospace';
+    trail.style.fontSize = getComputedStyle(noBtn).fontSize;
+    document.body.appendChild(trail);
+    setTimeout(()=> trail.remove(), 700);
 
-    buttons.appendChild(payBtn);
-    buttons.appendChild(noPayBtn);
-    overlay.appendChild(buttons);
-}
+    // телепортируем NO кнопку
+    const left = Math.random() * Math.max(0, window.innerWidth - 300);
+    const top  = Math.random() * Math.max(0, window.innerHeight - 150);
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = left + 'px';
+    noBtn.style.top = top + 'px';
 
-// --- Идея 3 ---
-function playFinalVideo(){
-    const overlay=document.querySelector('.overlay');
-    overlay.innerHTML='';
-    const video=document.createElement('video');
-    video.src='de_babki.mp4';
-    video.autoplay=true;
-    video.controls=false;
-    video.style.width='80%';
-    video.style.height='auto';
-    overlay.appendChild(video);
-    video.onended=()=>{ 
+    // на 15 клике — кнопка исчезает и появляется надпись на 1 секунду,
+    // затем переходим к окну оплаты
+    if(noClickCount >= 15){
+      setTimeout(()=>{
+        // показываем надпись
+        const insult = document.createElement('div');
+        insult.className = 'big-insult';
+        insult.textContent = 'ДА ЛАДНО, ТЫ ЛОХ КОТОРЫЙ СОСАЛ!!!';
+        document.body.appendChild(insult);
+        // скрываем кнопку
+        noBtn.style.display = 'none';
+        // через 1 сек — удаляем надпись и переходим к оплате
         setTimeout(()=>{
-            try{ window.close(); }catch(e){
-                overlay.innerHTML='';
-                const text=document.createElement('div');
-                text.className='question';
-                text.textContent='БАБКИ ДАЙ';
-                overlay.appendChild(text);
-            }
-        },5000);
-    };
+          insult.remove();
+          showPaymentQuestion();
+        }, 1000);
+      }, 300); // небольшая пауза перед показом
+    }
+  });
+
+  // да — скачивает yuarick.jpg и далее идёт оплата
+  yesBtn.addEventListener('click', ()=>{
+    // скачиваем фото
+    const a = document.createElement('a');
+    a.href = 'yuarick.jpg';
+    a.download = 'yuarick.jpg';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // скрываем кнопки и переходим к оплате
+    yesBtn.style.display='none';
+    noBtn.style.display='none';
+    setTimeout(()=> showPaymentQuestion(), 300);
+  });
+
+  buttonsWrap.appendChild(noBtn);
+  buttonsWrap.appendChild(yesBtn);
 }
+
+/* ========== Вопрос об оплате (идея 2) ========== */
+function showPaymentQuestion(){
+  const ov = createOverlay();
+  ov.innerHTML = '';
+
+  const question = document.createElement('div');
+  question.className = 'question';
+  question.textContent = 'Оплатишь 3 гривны?';
+  ov.appendChild(question);
+
+  // кнопка "Не платить" слева, "Оплатить" справа
+  const buttonsWrap = document.createElement('div');
+  buttonsWrap.className = 'buttons';
+  ov.appendChild(buttonsWrap);
+
+  const noPayBtn = document.createElement('button');
+  noPayBtn.className = 'btn red';
+  noPayBtn.textContent = 'Не платить';
+
+  const payBtn = document.createElement('button');
+  payBtn.className = 'btn green';
+  payBtn.textContent = 'Оплатить';
+
+  // слева/справа — расположим явно
+  // используем flex и порядок: сначала noPayBtn (слева), затем payBtn (справа)
+  buttonsWrap.appendChild(noPayBtn);
+  buttonsWrap.appendChild(payBtn);
+
+  // при нажатии на "Не платить" — пишем в консоль фейк-сообщение и идём к видео
+  noPayBtn.addEventListener('click', ()=>{
+    // добавим строку в консоль (или временное сообщение)
+    const ovConsole = createOverlay();
+    ovConsole.innerHTML = '';
+    const consoleBox = document.createElement('div');
+    consoleBox.className = 'console';
+    ovConsole.appendChild(consoleBox);
+
+    const time = new Date().toLocaleTimeString();
+    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены пользователем sdfdeedef2 в ${time}`, 'white', 20, ()=>{
+      // через 3 секунды запускаем финальное видео
+      setTimeout(()=> playDeBabkiVideo(), 1500);
+    });
+  });
+
+  payBtn.addEventListener('click', ()=>{
+    const ovConsole = createOverlay();
+    ovConsole.innerHTML = '';
+    const consoleBox = document.createElement('div');
+    consoleBox.className = 'console';
+    ovConsole.appendChild(consoleBox);
+
+    writeConsoleLine(consoleBox, 'Бабки давай, а то у твоей мамы сворую', 'green', 20, ()=>{
+      setTimeout(()=> playDeBabkiVideo(), 1500);
+    });
+  });
+}
+
+/* ========== Идея 3 — финальное видео (de_babki.mp4) и закрытие вкладки / fallback ========== */
+function playDeBabkiVideo(){
+  const ov = createOverlay();
+  ov.innerHTML = '';
+  const video = document.createElement('video');
+  video.src = 'de_babki.mp4';
+  video.autoplay = true;
+  video.controls = false;
+  video.style.width = '90%';
+  video.style.maxWidth = '1000px';
+  ov.appendChild(video);
+
+  // когда видео закончится — через 5 секунд пробуем закрыть вкладку
+  video.addEventListener('ended', ()=>{
+    setTimeout(()=>{
+      // попытка закрыть вкладку
+      try{
+        window.close();
+        // если window.close() не сработает, на большинстве браузеров ничего не произойдет —
+        // тогда показываем чёрный экран с надписью
+        setTimeout(()=>{
+          if(!document.hidden){
+            showBlackFallback();
+          }
+        }, 500);
+      }catch(e){
+        showBlackFallback();
+      }
+    }, 5000);
+  });
+
+  // safety: если видео не воспроизводится (autoplay blocked), всё равно после 6s показать fallback
+  setTimeout(()=>{
+    if(video.paused){
+      // попытаемся запустить
+      try{ video.play(); }catch(e){}
+    }
+  }, 800);
+}
+
+/* показываем черный экран с надписью "БАБКИ ДАЙ" */
+function showBlackFallback(){
+  // remove overlay
+  removeOverlay();
+  const black = document.createElement('div');
+  black.className = 'black-screen';
+  black.innerHTML = `<div class="text">БАБКИ ДАЙ</div>`;
+  document.body.appendChild(black);
+}
+
+/* ========== Инициализация ========== */
+// ничего не делаем — функции вызываются в нужный момент по кликам
+// если нужно — сюда можно добавить preloads
+
 </script>
 </body>
 </html>
