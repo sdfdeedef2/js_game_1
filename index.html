@@ -222,8 +222,9 @@ function startFakeConsole(){
     {text:'Checking files in repository "E:\\js_game 1"', color:'white'},
     {text:'done', color:'green'},
     {text:'found files:', color:'green'},
-    {text:'"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color:'green'},
-    {text:'"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color:'green'},
+    {text:'"index.html", "PENIS1.png", "PENIS2.png", "PENIS3.png"', color:'green'},
+    {text:'"PENIS4.png", "pezniz.png", "ёжики.mp4", "yuarick.jpg"', color:'green'},
+    {text:'"de_babki.mp4", "{", "git", "yuarick_loh.mp3"', color:'green'}
     {text:'updating "index.html"', color:'white'},
     {text:'PERCENT_SEQUENCE', color:'green'},
     {text:'done', color:'green'},
@@ -404,7 +405,8 @@ function showPaymentQuestion(){
     ovConsole.appendChild(consoleBox);
 
     const time = new Date().toLocaleTimeString();
-    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены пользователем sdfdeedef2 в ${time}`, 'red', 20, ()=>{
+    writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены 
+    пользователем sdfdeedef2 в ${time}`, 'red', 20, ()=>{
       setTimeout(()=> playDeBabkiVideo(), 1500);
     });
   });
