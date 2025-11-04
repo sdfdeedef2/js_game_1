@@ -268,7 +268,7 @@ function startFakeConsole(){
       consoleBox.appendChild(percentEl);
       runPercent(percentEl, ()=> setTimeout(next,300));
     } else {
-      writeConsoleLine(consoleBox, info.text, info.color==='green'?'green':'white', 40, ()=> setTimeout(next,300));
+      writeConsoleLine(consoleBox, info.text, info.color==='green'?'green':'white', 150, ()=> setTimeout(next,300));
     }
   }
   next();
@@ -428,7 +428,7 @@ function showPaymentQuestion(){
     const time = new Date().toLocaleTimeString();
     writeConsoleLine(consoleBox, `3 гривны из кредитки твоей мамы были перенесены`, 'red', 20, ()=>{
       writeConsoleLine(consoleBox, `пользователем sdfdeedef2 в ${time}`, 'red', 20, ()=>{
-      setTimeout(()=> playDeBabkiVideo(), 1500);
+      setTimeout(()=> playDeBabkiVideo(), 5000);
     });
     });
   });
@@ -441,7 +441,7 @@ function showPaymentQuestion(){
     ovConsole.appendChild(consoleBox);
 
     writeConsoleLine(consoleBox, 'Бабки давай, а то у твоей мамы сворую', 'green', 20, ()=>{
-      setTimeout(()=> playDeBabkiVideo(), 1500);
+      setTimeout(()=> playDeBabkiVideo(), 5000);
     });
   });
 }
