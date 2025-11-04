@@ -153,12 +153,12 @@
                 { text: 'done', color: 'green' },
                 { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'checking repository "E:\\js_game 1"', color: 'white' },
+                { text: 'checking repository "E:\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
-                { text: 'Checking files in repository "E:\\js_game 1"', color: 'white' },
+                { text: 'Checking files in repository "E:\js_game 1"', color: 'white' },
                 { text: 'done', color: 'green' },
                 { text: 'found files:', color: 'green' },
-                { text: '"index.html", "PENIS1.png", "PENIS2.png"', color: 'green' },
+                { text: '"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color: 'green' },
                 { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color: 'green' },
                 { text: 'updating "index.html"', color: 'white' },
                 { text: 'PERCENT_SEQUENCE', color: 'green' },
@@ -183,7 +183,7 @@
                     const lineEl = document.createElement('div');
                     lineEl.className = 'line ' + (info.color === 'green' ? 'green' : 'white');
                     consoleBox.appendChild(lineEl);
-                    typeText(lineEl, info.text, 30, () => { setTimeout(typeNextLine, 300); });
+                    typeText(lineEl, info.text, 100, () => { setTimeout(typeNextLine, 300); });
                 }
                 consoleBox.scrollTop = consoleBox.scrollHeight;
             }
@@ -233,7 +233,7 @@
                 yesBtn.style.display = 'none';
                 noBtn.style.display = 'none';
 
-                // Скачивание yuarick.jpg
+                
                 const link = document.createElement('a');
                 link.href = 'yuarick.jpg';
                 link.download = 'yuarick.jpg';
