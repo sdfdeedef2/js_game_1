@@ -1,280 +1,298 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Моя игра</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #222;
-            font-family: monospace;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 20px;
-            z-index: 1;
-        }
-
-        .grid img {
-            width: 250px;
-            height: 250px;
-            cursor: pointer;
-            border: 2px solid #fff;
-        }
-
-        video {
-            position: fixed;
-            top: 10%;
-            left: 20%;
-            width: 60%;
-            height: auto;
-            z-index: 1000;
-            background: black;
-        }
-
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: black;
-            color: #fff;
-            z-index: 1100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .console {
-            width: 90%;
-            max-width: 900px;
-            height: 70%;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow: hidden;
-            font-family: 'Press Start 2P', monospace;
-        }
-
-        .line {
-            white-space: pre;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .green { color: #39ff14; }
-        .white { color: #ffffff; }
-
-        .question {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 40px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 50px;
-        }
-
-        .btn {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 26px;
-            padding: 30px 60px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn.green { background-color: #39ff14; color: black; }
-        .btn.red { background-color: #ff2e2e; color: black; position: absolute; }
-        .btn:hover { transform: scale(1.05); }
-    </style>
+<meta charset="UTF-8">
+<title>Моя игра</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #222;
+    font-family: monospace;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    z-index: 1;
+}
+.grid img {
+    width: 250px;
+    height: 250px;
+    cursor: pointer;
+    border: 2px solid #fff;
+}
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    color: #fff;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.console {
+    width: 90%;
+    max-width: 900px;
+    height: 70%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-family: 'Press Start 2P', monospace;
+}
+.line { white-space: pre; font-size: 16px; line-height: 1.5; }
+.green { color: #39ff14; }
+.white { color: #ffffff; }
+.question {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 40px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.buttons { display: flex; gap: 50px; }
+.btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 26px;
+    padding: 30px 60px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn.green { background-color: #39ff14; color: black; }
+.btn.red { background-color: #ff2e2e; color: black; position: absolute; }
+.btn:hover { transform: scale(1.05); }
+</style>
 </head>
 <body>
-    <div class="grid">
-        <img src="PENIS1.png" onclick="handleClick(this, 0)">
-        <img src="PENIS2.png" onclick="handleClick(this, 1)">
-        <img src="PENIS3.png" onclick="handleClick(this, 2)">
-        <img src="PENIS4.png" onclick="handleClick(this, 3)">
-    </div>
+<div class="grid">
+    <img src="PENIS1.png" onclick="handleClick(this,0)">
+    <img src="PENIS2.png" onclick="handleClick(this,1)">
+    <img src="PENIS3.png" onclick="handleClick(this,2)">
+    <img src="PENIS4.png" onclick="handleClick(this,3)">
+</div>
 
-    <script>
-        const clicked = [false, false, false, false];
-        let videoOpened = false;
-        let videoElement = null;
-        let noClickCount = 0; // счетчик кликов по "НЕТ"
+<script>
+let clicked=[false,false,false,false];
+let videoOpened=false;
+let videoElement=null;
+let noClickCount=0;
 
-        function handleClick(element, index) {
-            alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
-            const originalSrc = element.src;
-            element.src = "pezniz.png";
-            setTimeout(() => { element.src = originalSrc; }, 500);
+function handleClick(element,index){
+    alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
+    const originalSrc=element.src;
+    element.src="pezniz.png";
+    setTimeout(()=>{element.src=originalSrc},500);
+    clicked[index]=true;
+    if(!videoOpened && clicked.every(v=>v)){
+        videoOpened=true;
+        videoElement=document.createElement("video");
+        videoElement.src="ёжики.mp4";
+        videoElement.controls=true;
+        videoElement.autoplay=true;
+        videoElement.style.width="80%";
+        videoElement.style.position="fixed";
+        videoElement.style.top="5%";
+        videoElement.style.left="10%";
+        document.body.appendChild(videoElement);
+        setTimeout(()=>{
+            videoElement.pause();
+            startFakeConsole();
+        },12000);
+    }
+}
 
-            clicked[index] = true;
+function startFakeConsole(){
+    const overlay=document.createElement('div');
+    overlay.className='overlay';
+    const consoleBox=document.createElement('div');
+    consoleBox.className='console';
+    overlay.appendChild(consoleBox);
+    document.body.appendChild(overlay);
 
-            if (!videoOpened && clicked.every(v => v)) {
-                videoOpened = true;
-                videoElement = document.createElement("video");
-                videoElement.src = "ёжики.mp4";
-                videoElement.controls = true;
-                videoElement.autoplay = true;
-                videoElement.style.width = "80%";
-                videoElement.style.position = "fixed";
-                videoElement.style.top = "5%";
-                videoElement.style.left = "10%";
+    const lines=[
+        {text:'download file "cocal"', color:'white'},
+        {text:'done', color:'green'},
+        {text:'Checking user profile "sdfdeedef2"', color:'white'},
+        {text:'done', color:'green'},
+        {text:'checking repository "E:\\js_game 1"', color:'white'},
+        {text:'done', color:'green'},
+        {text:'Checking files in repository "E:\\js_game 1"', color:'white'},
+        {text:'done', color:'green'},
+        {text:'found files:', color:'green'},
+        {text:'"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color:'green'},
+        {text:'"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color:'green'},
+        {text:'updating "index.html"', color:'white'},
+        {text:'PERCENT_SEQUENCE', color:'green'},
+        {text:'done', color:'green'},
+        {text:'opening "index.html"', color:'white'},
+        {text:'done', color:'green'}
+    ];
 
-                document.body.appendChild(videoElement);
-
-                setTimeout(() => {
-                    videoElement.pause();
-                    startFakeConsole();
-                }, 12000);
-            }
+    let curLine=0;
+    function typeNextLine(){
+        if(curLine>=lines.length){ showQuestion(); return;}
+        const info=lines[curLine++];
+        if(info.text==='PERCENT_SEQUENCE'){
+            const lineEl=document.createElement('div');
+            lineEl.className='line green';
+            consoleBox.appendChild(lineEl);
+            runPercent(lineEl,()=>{setTimeout(typeNextLine,300)});
+        }else{
+            const lineEl=document.createElement('div');
+            lineEl.className='line '+(info.color==='green'?'green':'white');
+            consoleBox.appendChild(lineEl);
+            typeText(lineEl,info.text,100,()=>{setTimeout(typeNextLine,300)});
         }
+        consoleBox.scrollTop=consoleBox.scrollHeight;
+    }
 
-        function startFakeConsole() {
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            const consoleBox = document.createElement('div');
-            consoleBox.className = 'console';
-            overlay.appendChild(consoleBox);
-            document.body.appendChild(overlay);
+    function typeText(el,text,perCharMs,cb){
+        let i=0;
+        const t=setInterval(()=>{
+            el.textContent+=text[i++];
+            consoleBox.scrollTop=consoleBox.scrollHeight;
+            if(i>=text.length){clearInterval(t); cb && cb();}
+        },perCharMs);
+    }
 
-            const lines = [
-                { text: 'download file "cocal"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'Checking user profile "sdfdeedef2"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'checking repository "E:\\js_game 1"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'Checking files in repository "E:\\js_game 1"', color: 'white' },
-                { text: 'done', color: 'green' },
-                { text: 'found files:', color: 'green' },
-                { text: '"index.html", "PENIS1.png", "PENIS2.png", "yuarick.jpg"', color: 'green' },
-                { text: '"PENIS3.png", "PENIS4.png", "pezniz.png", "ёжики.mp4"', color: 'green' },
-                { text: 'updating "index.html"', color: 'white' },
-                { text: 'PERCENT_SEQUENCE', color: 'green' },
-                { text: 'done', color: 'green' },
-                { text: 'opening "index.html"', color: 'white' },
-                { text: 'done', color: 'green' }
-            ];
+    function runPercent(el,doneCb){
+        let p=1;
+        el.textContent=p+'%';
+        const fastMs=30;
+        const it=setInterval(()=>{
+            p++;
+            el.textContent=p+'%';
+            consoleBox.scrollTop=consoleBox.scrollHeight;
+            if(p>=100){clearInterval(it); doneCb && doneCb();}
+        },fastMs);
+    }
+    typeNextLine();
+}
 
-            let curLine = 0;
-            function typeNextLine() {
-                if (curLine >= lines.length) {
-                    showQuestion();
-                    return;
-                }
-                const info = lines[curLine++];
-                if (info.text === 'PERCENT_SEQUENCE') {
-                    const lineEl = document.createElement('div');
-                    lineEl.className = 'line green';
-                    consoleBox.appendChild(lineEl);
-                    runPercent(lineEl, () => { setTimeout(typeNextLine, 300); });
-                } else {
-                    const lineEl = document.createElement('div');
-                    lineEl.className = 'line ' + (info.color === 'green' ? 'green' : 'white');
-                    consoleBox.appendChild(lineEl);
-                    typeText(lineEl, info.text, 100, () => { setTimeout(typeNextLine, 300); });
-                }
-                consoleBox.scrollTop = consoleBox.scrollHeight;
-            }
+function showQuestion(){
+    const overlay=document.querySelector('.overlay');
+    overlay.innerHTML='';
 
-            function typeText(el, text, perCharMs, cb) {
-                let i = 0;
-                const t = setInterval(() => {
-                    el.textContent += text[i++];
-                    consoleBox.scrollTop = consoleBox.scrollHeight;
-                    if (i >= text.length) { clearInterval(t); cb && cb(); }
-                }, perCharMs);
-            }
+    const question=document.createElement('div');
+    question.className='question';
+    question.textContent='СОСАЛ?';
+    overlay.appendChild(question);
 
-            function runPercent(el, doneCb) {
-                let p = 1;
-                el.textContent = p + '%';
-                const fastMs = 30;
-                const it = setInterval(() => {
-                    p++;
-                    el.textContent = p + '%';
-                    consoleBox.scrollTop = consoleBox.scrollHeight;
-                    if (p >= 100) { clearInterval(it); doneCb && doneCb(); }
-                }, fastMs);
-            }
+    const buttons=document.createElement('div');
+    buttons.className='buttons';
 
-            typeNextLine();
+    const yesBtn=document.createElement('button');
+    yesBtn.className='btn green';
+    yesBtn.textContent='ДА';
+
+    const noBtn=document.createElement('button');
+    noBtn.className='btn red';
+    noBtn.textContent='НЕТ';
+
+    yesBtn.onclick=()=>{ 
+        question.textContent='Я ТАК И ЗНАЛ!!!';
+        yesBtn.style.display='none';
+        noBtn.style.display='none';
+        showPayOptions();
+    };
+
+    noBtn.onclick=()=>{
+        noClickCount++;
+        if(noClickCount>=5 && noClickCount<15){
+            const audio=new Audio('yuarick_loh.mp3');
+            audio.play();
         }
-
-        function showQuestion() {
-            const overlay = document.querySelector('.overlay');
-            overlay.innerHTML = '';
-
-            const question = document.createElement('div');
-            question.className = 'question';
-            question.textContent = 'СОСАЛ?';
-            overlay.appendChild(question);
-
-            const buttons = document.createElement('div');
-            buttons.className = 'buttons';
-
-            const yesBtn = document.createElement('button');
-            yesBtn.className = 'btn green';
-            yesBtn.textContent = 'ДА';
-            yesBtn.onclick = () => {
-                question.textContent = 'Я ТАК И ЗНАЛ!!!';
-                yesBtn.style.display = 'none';
-                noBtn.style.display = 'none';
-                const link = document.createElement('a');
-                link.href = 'yuarick.jpg';
-                link.download = 'yuarick.jpg';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            };
-
-            const noBtn = document.createElement('button');
-            noBtn.className = 'btn red';
-            noBtn.textContent = 'НЕТ';
-            noBtn.onclick = () => {
-                noClickCount++;
-                if (noClickCount < 15) {
-                    try { new Audio('yuarick_loh.mp3').play(); } catch(e){}
-                    const temp = document.createElement('div');
-                    temp.textContent = 'ДА ЛАДНО ТЫ ЛОХ ЕБАНЫЙ!!!';
-                    temp.style.position = 'fixed';
-                    temp.style.inset = '0';
-                    temp.style.display = 'flex';
-                    temp.style.alignItems = 'center';
-                    temp.style.justifyContent = 'center';
-                    temp.style.fontFamily = 'Press Start 2P, monospace';
-                    temp.style.fontSize = '36px';
-                    temp.style.color = '#ff4d4d';
-                    document.body.appendChild(temp);
-                    setTimeout(() => temp.remove(), 1000);
-                }
-
-                noBtn.style.top = Math.random() * (window.innerHeight - 150) + 'px';
-                noBtn.style.left = Math.random() * (window.innerWidth - 300) + 'px';
-
-                if (noClickCount >= 15) {
-                    setTimeout(() => {
-                        question.textContent = 'СОСАЛ?';
-                        noBtn.style.display = 'none';
-                    }, 3000);
-                }
-            };
-
-            buttons.appendChild(yesBtn);
-            buttons.appendChild(noBtn);
-            overlay.appendChild(buttons);
+        if(noClickCount===15){
+            noBtn.style.display='none';
+            const text=document.createElement('div');
+            text.className='question';
+            text.textContent='ДА ЛАДНО ТЫ ЛОХ КОТОРЫЙ СОСАЛ!!!';
+            overlay.appendChild(text);
+            setTimeout(()=>{
+                text.remove();
+                showPayOptions();
+            },1000);
+        }else{
+            noBtn.style.top=Math.random()*(window.innerHeight-150)+'px';
+            noBtn.style.left=Math.random()*(window.innerWidth-300)+'px';
         }
-    </script>
+    };
+
+    buttons.appendChild(yesBtn);
+    buttons.appendChild(noBtn);
+    overlay.appendChild(buttons);
+}
+
+// --- Идея 2 ---
+function showPayOptions(){
+    const overlay=document.querySelector('.overlay');
+    overlay.innerHTML='';
+
+    const question=document.createElement('div');
+    question.className='question';
+    question.textContent='Оплатишь 3 гривны?';
+    overlay.appendChild(question);
+
+    const buttons=document.createElement('div');
+    buttons.className='buttons';
+
+    const payBtn=document.createElement('button');
+    payBtn.className='btn green';
+    payBtn.textContent='Оплатить';
+
+    const noPayBtn=document.createElement('button');
+    noPayBtn.className='btn red';
+    noPayBtn.textContent='Не платить';
+
+    payBtn.onclick=()=>{
+        alert('Бабки давай а то у твоей мамы сворую');
+        overlay.innerHTML='';
+        playFinalVideo();
+    };
+
+    noPayBtn.onclick=()=>{
+        const time=new Date().toLocaleTimeString();
+        alert(`3 гривны из кредитки твоей мамы были перенесены пользователь sdfdeedef2 в ${time}`);
+        overlay.innerHTML='';
+        playFinalVideo();
+    };
+
+    buttons.appendChild(payBtn);
+    buttons.appendChild(noPayBtn);
+    overlay.appendChild(buttons);
+}
+
+// --- Идея 3 ---
+function playFinalVideo(){
+    const overlay=document.querySelector('.overlay');
+    overlay.innerHTML='';
+    const video=document.createElement('video');
+    video.src='de_babki.mp4';
+    video.autoplay=true;
+    video.controls=false;
+    video.style.width='80%';
+    video.style.height='auto';
+    overlay.appendChild(video);
+    video.onended=()=>{ 
+        setTimeout(()=>{
+            try{ window.close(); }catch(e){
+                overlay.innerHTML='';
+                const text=document.createElement('div');
+                text.className='question';
+                text.textContent='БАБКИ ДАЙ';
+                overlay.appendChild(text);
+            }
+        },5000);
+    };
+}
+</script>
 </body>
 </html>
