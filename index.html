@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -24,8 +24,8 @@
         }
 
         .grid img {
-            width: 250px;   /* увеличена ширина */
-            height: 250px;  /* увеличена высота */
+            width: 250px;
+            height: 250px;
             cursor: pointer;
             border: 2px solid #fff;
         }
@@ -85,8 +85,8 @@
 
         .btn {
             font-family: 'Press Start 2P', monospace;
-            font-size: 26px;        /* увеличен шрифт для кнопок */
-            padding: 30px 60px;     /* увеличен padding */
+            font-size: 26px;
+            padding: 30px 60px;
             border: none;
             border-radius: 20px;
             cursor: pointer;
@@ -95,7 +95,6 @@
 
         .btn.green { background-color: #39ff14; color: black; }
         .btn.red { background-color: #ff2e2e; color: black; position: absolute; }
-
         .btn:hover { transform: scale(1.05); }
     </style>
 </head>
@@ -111,6 +110,7 @@
         const clicked = [false, false, false, false];
         let videoOpened = false;
         let videoElement = null;
+        let noClickCount = 0; // счетчик кликов по "НЕТ"
 
         function handleClick(element, index) {
             alert("(ERROR_my_game1= 0) ЯРИК СУКА ВЕРНИ БЛЯДЬ 3 ГРИВНЫ НАХУЙ!!!");
@@ -229,10 +229,8 @@
             yesBtn.textContent = 'ДА';
             yesBtn.onclick = () => {
                 question.textContent = 'Я ТАК И ЗНАЛ!!!';
-                question.style.fontFamily = 'Press Start 2P, monospace';
                 yesBtn.style.display = 'none';
                 noBtn.style.display = 'none';
-
                 const link = document.createElement('a');
                 link.href = 'yuarick.jpg';
                 link.download = 'yuarick.jpg';
@@ -245,8 +243,32 @@
             noBtn.className = 'btn red';
             noBtn.textContent = 'НЕТ';
             noBtn.onclick = () => {
+                noClickCount++;
+                if (noClickCount < 15) {
+                    try { new Audio('yuarick_loh.mp3').play(); } catch(e){}
+                    const temp = document.createElement('div');
+                    temp.textContent = 'ДА ЛАДНО ТЫ ЛОХ ЕБАНЫЙ!!!';
+                    temp.style.position = 'fixed';
+                    temp.style.inset = '0';
+                    temp.style.display = 'flex';
+                    temp.style.alignItems = 'center';
+                    temp.style.justifyContent = 'center';
+                    temp.style.fontFamily = 'Press Start 2P, monospace';
+                    temp.style.fontSize = '36px';
+                    temp.style.color = '#ff4d4d';
+                    document.body.appendChild(temp);
+                    setTimeout(() => temp.remove(), 1000);
+                }
+
                 noBtn.style.top = Math.random() * (window.innerHeight - 150) + 'px';
                 noBtn.style.left = Math.random() * (window.innerWidth - 300) + 'px';
+
+                if (noClickCount >= 15) {
+                    setTimeout(() => {
+                        question.textContent = 'СОСАЛ?';
+                        noBtn.style.display = 'none';
+                    }, 3000);
+                }
             };
 
             buttons.appendChild(yesBtn);
